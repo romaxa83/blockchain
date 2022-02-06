@@ -1,5 +1,11 @@
 ### Реализация blockchain на golang
 
+Используется БД <a href="https://github.com/dgraph-io/badger" >BadgerDB</a>
+
+используемые ключи в бд
+* lh - lastHash
+
+
 ##### Основные понятия
 
 <dl>
