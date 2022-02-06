@@ -10,6 +10,7 @@ import (
 	"math/big"
 )
 
+// сложность получения нужного хеша
 const Difficulty = 12
 
 type ProofOfWork struct {
