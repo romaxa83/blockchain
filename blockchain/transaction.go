@@ -1,4 +1,4 @@
-package internal
+package blockchain
 
 import (
 	"bytes"
@@ -15,14 +15,16 @@ type Transaction struct {
 	Outputs []TxOutput
 }
 
+// выход, хранит данные (монеты)
 type TxOutput struct {
 	Value  int
-	PubKey string
+	PubKey string // блокируется ключом
 }
 
+// вход, ссылается на предыдущий выход
 type TxInput struct {
-	ID  []byte
-	Out int
+	ID  []byte // идентификатор транзакции выхода
+	Out int    // хранит индекс выхода данной транзакции
 	Sig string
 }
 
@@ -38,6 +40,7 @@ func (tx *Transaction) SetID() {
 	tx.ID = hash[:]
 }
 
+// проверка на начальную транзакцию
 func (tx *Transaction) IsCoinbase() bool {
 	return len(tx.Inputs) == 1 && len(tx.Inputs[0].ID) == 0 && tx.Inputs[0].Out == -1
 }
@@ -50,6 +53,7 @@ func (out *TxOutput) CanBeUnlocked(data string) bool {
 	return out.PubKey == data
 }
 
+// создание начальной транзакции, которая не требует выходов
 func CoinbaseTx(to, data string) *Transaction {
 	if data == "" {
 		data = fmt.Sprintf("Coins to %s", to)
@@ -57,6 +61,11 @@ func CoinbaseTx(to, data string) *Transaction {
 
 	txin := TxInput{[]byte{}, -1, data}
 	txou := TxOutput{100, to}
+
+	//fmt.Println("CoinbaseTx")
+	//fmt.Printf("TXIN %+v", txin)
+	//fmt.Println()
+	//fmt.Printf("TXOU %+v", txou)
 
 	tx := Transaction{nil, []TxInput{txin}, []TxOutput{txou}}
 	tx.SetID()

@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/romaxa83/blockchain/internal"
+	"github.com/romaxa83/blockchain/blockchain"
 	"log"
 	"os"
 	"runtime"
@@ -28,7 +28,7 @@ func (cli *CommandLine) validateArgs() {
 }
 
 func (cli *CommandLine) printChain() {
-	chain := internal.ContinueBlockChain("")
+	chain := blockchain.ContinueBlockChain("")
 	defer chain.DB.Close()
 	iter := chain.Iterator()
 
@@ -37,7 +37,7 @@ func (cli *CommandLine) printChain() {
 
 		fmt.Printf("Prev. hash: %x\n", block.PrevHash)
 		fmt.Printf("Hash: %x\n", block.Hash)
-		pow := internal.NewProof(block)
+		pow := blockchain.NewProof(block)
 		fmt.Printf("PoW: %s\n", strconv.FormatBool(pow.Validate()))
 		fmt.Println()
 
@@ -48,13 +48,13 @@ func (cli *CommandLine) printChain() {
 }
 
 func (cli *CommandLine) createBlockChain(address string) {
-	chain := internal.InitBlockChain(address)
+	chain := blockchain.InitBlockChain(address)
 	chain.DB.Close()
 	fmt.Println("Finished!")
 }
 
 func (cli *CommandLine) getBalance(address string) {
-	chain := internal.ContinueBlockChain(address)
+	chain := blockchain.ContinueBlockChain(address)
 	defer chain.DB.Close()
 
 	balance := 0
@@ -68,11 +68,11 @@ func (cli *CommandLine) getBalance(address string) {
 }
 
 func (cli *CommandLine) send(from, to string, amount int) {
-	chain := internal.ContinueBlockChain(from)
+	chain := blockchain.ContinueBlockChain(from)
 	defer chain.DB.Close()
 
-	tx := internal.NewTransaction(from, to, amount, chain)
-	chain.AddBlock([]*internal.Transaction{tx})
+	tx := blockchain.NewTransaction(from, to, amount, chain)
+	chain.AddBlock([]*blockchain.Transaction{tx})
 	fmt.Println("Success!")
 }
 
