@@ -5,6 +5,29 @@
 используемые ключи в бд
 * lh - lastHash
 
+##### Команды
+```shell
+# создает новый кошелек
+go run main.go createwallet
+
+# список всех доступных кошельков
+go run main.go listaddresses
+
+# создание блокчейна после address передается
+# адрес сгенерированный при создания командой createwallet
+# имеет такой вид "19Vto6q9Gse3GxKRGYGUsGitPqXbB1pZxM"
+go run main.go createblockchain -address {addres}
+
+# выведет информацию по блокчейну и транзакциям в нем
+go run main.go printchain
+
+# перевод условных токенов (начисляются 100 токенов при создании блокчейна)
+# от одного адреса к другому
+go run main.go send -to {address} -from {address} -amount 30
+
+# выводит баланс токенов конкретного адреса
+go run main.go getbalance -address {address}
+```
 
 ##### Основные понятия
 
